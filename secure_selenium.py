@@ -1,4 +1,3 @@
-
 import logging
 import platform
 import random
@@ -17,7 +16,8 @@ class SecureSelenium():
                  window_width: int = 1200,
                  window_length: int = 800,
                  wait_sec_min: int = 3,
-                 wait_sec_max: int = 5):
+                 wait_sec_max: int = 5,
+                 proxy: str = None):
         """Create webdriver and pass in browser settings.
 
         Args:
@@ -30,7 +30,8 @@ class SecureSelenium():
                 requests to websites
             wait_sec_max: Maximum seconds to wait between Selenium
                 requests to websites
-
+            proxy: Pass in proxy address and port. Must be http:// in prefix
+                even if connection is https://
         """
         self.webdriver_path = webdriver_path
         self.headless = headless
@@ -39,6 +40,7 @@ class SecureSelenium():
         self.window_length = window_length
         self.wait_sec_min = wait_sec_min
         self.wait_sec_max = wait_sec_max
+        self.proxy = proxy
 
         browser_options = options.Options()
 
@@ -61,6 +63,8 @@ class SecureSelenium():
         # Bypass OS security model
         browser_options.add_argument("--no-sandbox")
         browser_options.add_argument(f"user-agent={self.user_agent}")
+        if self.proxy:
+            browser_options.add_argument(f"--proxy-server={self.proxy}")
         browser_options.headless = self.headless
 
         self.webdriver = webdriver.Chrome(
@@ -72,14 +76,11 @@ class SecureSelenium():
 
         Args:
             url: Endpoint to call
-
-        Returns: Response object in Selenium
         """
         logging.info("Waiting between %s and %s seconds.",
                      self.wait_sec_min, self.wait_sec_max)
         time.sleep(random.randint(self.wait_sec_min, self.wait_sec_max))
-        response = self.webdriver.get(url)
-        print(type(response))
+        self.webdriver.get(url)
 
     def close(self):
         """Close webdriver."""
