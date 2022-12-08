@@ -39,7 +39,7 @@ _IMPORTANT: Chrome browser and Chrome webdriver must match in version but not ne
 
 Ensure the location of the Chrome browser is in the environment variable `$PATH`.
 
-**Never specify the `--noheadless` flag for Docker run run_checkmate.**
+**Never specify the `--noheadless` flag for Docker.**
 
 This will result in `(unknown error: DevToolsActivePort file doesn't exist)
   (The process started from chrome location /usr/bin/google-chrome is no longer running, so ChromeDriver is assuming that Chrome has crashed.)`
