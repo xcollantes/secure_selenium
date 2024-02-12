@@ -9,15 +9,18 @@ from selenium.webdriver.chrome import options
 from selenium.webdriver.support.ui import WebDriverWait
 
 
-class SecureSelenium():
-    def __init__(self, webdriver_path: str,
-                 headless: bool,
-                 user_agent: str = None,
-                 window_width: int = 1200,
-                 window_length: int = 800,
-                 wait_sec_min: int = 3,
-                 wait_sec_max: int = 5,
-                 proxy: str = None):
+class SecureSelenium:
+    def __init__(
+        self,
+        webdriver_path: str,
+        headless: bool,
+        user_agent: str = None,
+        window_width: int = 1200,
+        window_length: int = 800,
+        wait_sec_min: int = 3,
+        wait_sec_max: int = 5,
+        proxy: str = None,
+    ):
         """Create webdriver and pass in browser settings.
 
         Args:
@@ -50,13 +53,13 @@ class SecureSelenium():
         #   Search for "cdc_asdjflasutopfhvcZLmcfl_" in webdriver
         #   and replace with same length string.
         browser_options.add_experimental_option(
-            "excludeSwitches", ["enable-automation"])
-        browser_options.add_experimental_option(
-            "useAutomationExtension", False)
+            "excludeSwitches", ["enable-automation"]
+        )
+        browser_options.add_experimental_option("useAutomationExtension", False)
+        browser_options.add_argument("--disable-blink-features=AutomationControlled")
         browser_options.add_argument(
-            "--disable-blink-features=AutomationControlled")
-        browser_options.add_argument(
-            f"window-size={self.window_width},{self.window_length}")
+            f"window-size={self.window_width},{self.window_length}"
+        )
         browser_options.add_argument("disable-infobars")  # disabling infobars
         # overcome limited resource problems
         browser_options.add_argument("--disable-dev-shm-usage")
@@ -67,8 +70,7 @@ class SecureSelenium():
             browser_options.add_argument(f"--proxy-server={self.proxy}")
         browser_options.headless = self.headless
 
-        self.webdriver = webdriver.Chrome(
-            self.webdriver_path, options=browser_options)
+        self.webdriver = webdriver.Chrome(self.webdriver_path, options=browser_options)
         self.webdriver.implicitly_wait(self.wait_sec_min)
 
     def get(self, url):
@@ -77,8 +79,9 @@ class SecureSelenium():
         Args:
             url: Endpoint to call
         """
-        logging.info("Waiting between %s and %s seconds.",
-                     self.wait_sec_min, self.wait_sec_max)
+        logging.info(
+            "Waiting between %s and %s seconds.", self.wait_sec_min, self.wait_sec_max
+        )
         time.sleep(random.randint(self.wait_sec_min, self.wait_sec_max))
         self.webdriver.get(url)
 
@@ -110,11 +113,12 @@ class SecureSelenium():
             return user_agent_param
 
         logging.info("No user agent supplied, building one...")
-        machine: str = f"{platform.machine()}" if platform.machine(
-        ) is not None else ""
+        machine: str = f"{platform.machine()}" if platform.machine() is not None else ""
 
-        user_agent: str = (f"Mozilla/5.0 (X11; {platform.system()}{machine}) "
-                           + "AppleWebKit/537.36 (KHTML, like Gecko) "
-                           + "Chrome/{self.chrome_version} Safari/537.36")
+        user_agent: str = (
+            f"Mozilla/5.0 (X11; {platform.system()}{machine}) "
+            + "AppleWebKit/537.36 (KHTML, like Gecko) "
+            + "Chrome/{self.chrome_version} Safari/537.36"
+        )
         logging.info(user_agent)
         return user_agent
