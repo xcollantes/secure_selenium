@@ -41,7 +41,7 @@ class SecureSelenium:
         self.webdriver_path = webdriver_path
         self.chrome_version = chrome_version
         self.headless = headless
-        self.user_agent = self._get_user_agent(user_agent)
+        self.user_agent = self.__get_user_agent(user_agent)
         self.window_width = window_width
         self.window_length = window_length
         self.wait_sec_min = wait_sec_min
