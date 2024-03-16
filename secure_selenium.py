@@ -13,6 +13,7 @@ class SecureSelenium:
     def __init__(
         self,
         webdriver_path: str,
+        chrome_version: str,
         headless: bool,
         user_agent: str = None,
         window_width: int = 1200,
@@ -25,6 +26,7 @@ class SecureSelenium:
 
         Args:
             webdriver_path: Full path to webdriver
+            chrome_version: Chrome version browser.
             headless: Set True to run without monitor
             user_agent: Web user agent to look like
             window_width: Width of browser in pixels
@@ -37,6 +39,7 @@ class SecureSelenium:
                 even if connection is https://
         """
         self.webdriver_path = webdriver_path
+        self.chrome_version = chrome_version
         self.headless = headless
         self.user_agent = self._get_user_agent(user_agent)
         self.window_width = window_width
@@ -89,7 +92,7 @@ class SecureSelenium:
         """Close webdriver."""
         self.webdriver.close()
 
-    def _initial_cookies(self):
+    def initial_cookies(self):
         """Visit some websites for the browser to pick up cookies.
 
         Websites can check if cookies are present.  Some websites may
@@ -100,7 +103,7 @@ class SecureSelenium:
         time.sleep(random.randint(self.wait_sec_min, self.wait_sec_max))
         self.webdriver.get("https://google.com/search?q=cookies")
 
-    def _get_user_agent(self, user_agent_param) -> str:
+    def __get_user_agent(self, user_agent_param) -> str:
         """Build user agent to avoid security on websites.
 
         Args:
@@ -116,9 +119,9 @@ class SecureSelenium:
         machine: str = f"{platform.machine()}" if platform.machine() is not None else ""
 
         user_agent: str = (
-            f"Mozilla/5.0 (X11; {platform.system()}{machine}) "
+            f"Mozilla/5.0 (X11; {platform.system()} {machine}) "
             + "AppleWebKit/537.36 (KHTML, like Gecko) "
-            + "Chrome/{self.chrome_version} Safari/537.36"
+            + f"Chrome/{self.chrome_version} Safari/537.36"
         )
         logging.info(user_agent)
         return user_agent
