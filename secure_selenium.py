@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome import options
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
 
 
 class SecureSelenium:
@@ -102,6 +103,26 @@ class SecureSelenium:
         self.webdriver.get("https://google.com")
         time.sleep(random.randint(self.wait_sec_min, self.wait_sec_max))
         self.webdriver.get("https://google.com/search?q=cookies")
+
+    def drag(self, start_x: int, start_y: int, end_x: int, end_y: int) -> ActionBuilder:
+        """Click down mouse and move mouse while pressing.
+
+        Returns an ActionBuilder which can be activated with `drag_instance.perform()`.
+
+        Args:
+            start_x: X starting mouse coordinate.
+            start_y: Y starting mouse coordinate.
+            end_x: X ending drag.
+            end_y: Y ending drag.
+
+        Returns:
+            ActionBuilder object.
+        """
+        mouse = ActionBuilder(self.webdriver)
+        mouse.pointer_action.move_to_location(start_x, start_y)
+        mouse.pointer_action.click_and_hold()
+        mouse.pointer_action.move_to_location(end_x, end_y)
+        return mouse
 
     def __get_user_agent(self, user_agent_param) -> str:
         """Build user agent to avoid security on websites.
