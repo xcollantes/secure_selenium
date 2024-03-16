@@ -104,6 +104,14 @@ class SecureSelenium:
         time.sleep(random.randint(self.wait_sec_min, self.wait_sec_max))
         self.webdriver.get("https://google.com/search?q=cookies")
 
+    def scroll_by(self, down_pixels: int) -> None:
+        """Scroll page down.
+
+        Args:
+            down_pixels: Amount in pixels to scroll down.
+        """
+        self.webdriver.execute_script(f"window.scrollBy(0,{down_pixels})")
+
     def drag(self, start_x: int, start_y: int, end_x: int, end_y: int) -> ActionBuilder:
         """Click down mouse and move mouse while pressing.
 
